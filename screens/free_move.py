@@ -51,6 +51,46 @@ class FreeMoveScreen(tk.Frame):
         button_cancelar.place(x=40, y=320, width=320, height=65)
         button_cancelar["command"] = self.button_visualizar_command
 
+        button_arrow_up = tk.Button(self)
+        button_arrow_up["bg"] = "#efefef"
+        ft = tk_font.Font(family='Times', size=40)
+        button_arrow_up["font"] = ft
+        button_arrow_up["fg"] = "#000000"
+        button_arrow_up["justify"] = "center"
+        button_arrow_up["text"] = "⮝"
+        button_arrow_up.place(x=540, y=90, width=80, height=80)
+        button_arrow_up["command"] = self.button_visualizar_command
+
+        button_arrow_down = tk.Button(self)
+        button_arrow_down["bg"] = "#efefef"
+        ft = tk_font.Font(family='Times', size=40)
+        button_arrow_down["font"] = ft
+        button_arrow_down["fg"] = "#000000"
+        button_arrow_down["justify"] = "center"
+        button_arrow_down["text"] = "⮟"
+        button_arrow_down.place(x=540, y=320, width=80, height=80)
+        button_arrow_down["command"] = self.button_visualizar_command
+
+        button_arrow_right = tk.Button(self)
+        button_arrow_right["bg"] = "#efefef"
+        ft = tk_font.Font(family='Times', size=40)
+        button_arrow_right["font"] = ft
+        button_arrow_right["fg"] = "#000000"
+        button_arrow_right["justify"] = "center"
+        button_arrow_right["text"] = "⮞"
+        button_arrow_right.place(x=665, y=207, width=80, height=80)
+        button_arrow_right["command"] = self.button_visualizar_command
+
+        button_arrow_left = tk.Button(self)
+        button_arrow_left["bg"] = "#efefef"
+        ft = tk_font.Font(family='Times', size=40)
+        button_arrow_left["font"] = ft
+        button_arrow_left["fg"] = "#000000"
+        button_arrow_left["justify"] = "center"
+        button_arrow_left["text"] = "⮜"
+        button_arrow_left.place(x=415, y=207, width=80, height=80)
+        button_arrow_left["command"] = self.button_visualizar_command
+
     def button_visualizar_command(self):
         print("command")
         if self.selected_planet:
