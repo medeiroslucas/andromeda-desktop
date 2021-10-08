@@ -1,10 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
 import tkinter.font as tk_font
 
-from setting import SCREEN_HEIGHT, SCREEN_WIDTH, APP_TITLE
 from utils import get_planets_dict
-from PIL import ImageTk, Image
+from app.esp_adapter_mock import EspAdapterMock
 
 
 class FreeMoveScreen(tk.Frame):
@@ -39,7 +37,7 @@ class FreeMoveScreen(tk.Frame):
         button_finalizar["justify"] = "center"
         button_finalizar["text"] = "Finalizar"
         button_finalizar.place(x=40, y=250, width=320, height=65)
-        button_finalizar["command"] = self.button_visualizar_command
+        button_finalizar["command"] = self.button_finalizar_command
 
         button_cancelar = tk.Button(self)
         button_cancelar["bg"] = "#efefef"
@@ -49,7 +47,7 @@ class FreeMoveScreen(tk.Frame):
         button_cancelar["justify"] = "center"
         button_cancelar["text"] = "Cancelar"
         button_cancelar.place(x=40, y=320, width=320, height=65)
-        button_cancelar["command"] = self.button_visualizar_command
+        button_cancelar["command"] = self.button_cancelar_command
 
         button_arrow_up = tk.Button(self)
         button_arrow_up["bg"] = "#efefef"
@@ -59,7 +57,7 @@ class FreeMoveScreen(tk.Frame):
         button_arrow_up["justify"] = "center"
         button_arrow_up["text"] = "⮝"
         button_arrow_up.place(x=540, y=90, width=80, height=80)
-        button_arrow_up["command"] = self.button_visualizar_command
+        button_arrow_up["command"] = self.move_up
 
         button_arrow_down = tk.Button(self)
         button_arrow_down["bg"] = "#efefef"
@@ -69,7 +67,7 @@ class FreeMoveScreen(tk.Frame):
         button_arrow_down["justify"] = "center"
         button_arrow_down["text"] = "⮟"
         button_arrow_down.place(x=540, y=320, width=80, height=80)
-        button_arrow_down["command"] = self.button_visualizar_command
+        button_arrow_down["command"] = self.move_down
 
         button_arrow_right = tk.Button(self)
         button_arrow_right["bg"] = "#efefef"
@@ -79,7 +77,7 @@ class FreeMoveScreen(tk.Frame):
         button_arrow_right["justify"] = "center"
         button_arrow_right["text"] = "⮞"
         button_arrow_right.place(x=665, y=207, width=80, height=80)
-        button_arrow_right["command"] = self.button_visualizar_command
+        button_arrow_right["command"] = self.move_right
 
         button_arrow_left = tk.Button(self)
         button_arrow_left["bg"] = "#efefef"
@@ -89,17 +87,27 @@ class FreeMoveScreen(tk.Frame):
         button_arrow_left["justify"] = "center"
         button_arrow_left["text"] = "⮜"
         button_arrow_left.place(x=415, y=207, width=80, height=80)
-        button_arrow_left["command"] = self.button_visualizar_command
+        button_arrow_left["command"] = self.move_left
 
-    def button_visualizar_command(self):
-        print("command")
-        if self.selected_planet:
-            print(f"Selected planet {self.selected_planet}")
+    def move_up(self):
+        self.controller.dx += 1
 
-    def onselect(self, evt):
-        # Note here that Tkinter passes an event object to onselect()
-        w = evt.widget
-        planet = w.get()
-        planet_name = self.plantes_dict[planet]
-        self.selected_planet = planet_name
-        print(f'You selected item: {planet_name}')
+    def move_down(self):
+        self.controller.dx -= 1
+
+    def move_left(self):
+        self.controller.dy -= 1
+
+    def move_right(self):
+        self.controller.dy += 1
+
+    def button_finalizar_command(self):
+
+        self.controller.show_frame("HomeScreen")
+
+    def button_cancelar_command(self):
+
+        self.controller.dx = 0
+        self.controller.dy = 0
+
+        self.controller.show_frame("HomeScreen")

@@ -7,8 +7,9 @@ authors = ["lucas <medeirosrosalucas@gmail.com>"]
 [tool.poetry.dependencies]
 python = ">=3.7,<3.9"
 python-decouple = "3.4"
-astropy = "*"
+astropy = "4.3.1"
 Pillow = "8.3.2"
+gattlib = "0.20201113"
 
 [tool.poetry.dev-dependencies]
 pytest = "6.2.4"

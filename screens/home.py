@@ -1,9 +1,13 @@
+import threading
+import time
+
 import tkinter as tk
 import tkinter.font as tk_font
 
-from setting import SCREEN_HEIGHT, SCREEN_WIDTH, APP_TITLE
 from utils import get_planets_dict
 from PIL import ImageTk, Image
+from app.coordenates import get_planet_coord
+from setting import MIN_DEG_ALT, MIN_DEG_AZ
 
 
 class HomeScreen(tk.Frame):
@@ -13,6 +17,9 @@ class HomeScreen(tk.Frame):
 
         self.selected_planet = None
         self.controller = controller
+
+        self.positioning = False
+        self.positioning_lock = threading.Lock()
 
         self.parent = parent
         self.plantes_dict = get_planets_dict()
@@ -53,7 +60,7 @@ class HomeScreen(tk.Frame):
         button_visualizar["justify"] = "center"
         button_visualizar["text"] = "Visualizar"
         button_visualizar.place(x=390, y=350, width=320, height=65)
-        button_visualizar["command"] = self.button_visualizar_command
+        button_visualizar["command"] = self.visualizar_button_action
 
         button_ajuste_fino = tk.Button(self)
         button_ajuste_fino["bg"] = "#efefef"
@@ -63,15 +70,42 @@ class HomeScreen(tk.Frame):
         button_ajuste_fino["justify"] = "center"
         button_ajuste_fino["text"] = "Ajuste Fino"
         button_ajuste_fino.place(x=390, y=430, width=320, height=65)
-        button_ajuste_fino["command"] = self.button_visualizar_command
+        button_ajuste_fino["command"] = self.ajuste_fino_button_action
 
-    def button_visualizar_command(self):
-        print("command")
-        if self.selected_planet:
-            print(f"Selected planet {self.selected_planet}")
+    def visualizar_button_action(self):
+
+        if not self.selected_planet:
+            return
+
+        thr = threading.Thread(target=self.position_planet, args=(), kwargs={}, daemon=True)
+        self.positioning_lock.acquire()
+        self.positioning = True
+        self.positioning_lock.release()
+
+        thr.start()
+
+    def position_planet(self):
+
+        while self.positioning:
+            coord = get_planet_coord(self.selected_planet, self.controller.lat, self.controller.long)
+            az = float(coord.az.deg) + MIN_DEG_AZ * self.controller.dx
+            alt = float(coord.alt.deg) + MIN_DEG_ALT * self.controller.dy
+            print(f"Az: {az}, Alt: {alt} - dx: {self.controller.dx}, dy: {self.controller.dy}")
+            self.controller.esp.send_coord(az, alt)
+            time.sleep(1)
+
+        print("Out")
+
+    def ajuste_fino_button_action(self):
+        self.controller.show_frame("FreeMoveScreen")
 
     def onselect(self, evt):
-        # Note here that Tkinter passes an event object to onselect()
+
+        if self.positioning:
+            self.positioning_lock.acquire()
+            self.positioning = False
+            self.positioning_lock.release()
+
         w = evt.widget
         index = int(w.curselection()[0])
         planet = w.get(index)

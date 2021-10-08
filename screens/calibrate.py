@@ -5,7 +5,9 @@ import tkinter.font as tk_font
 
 from utils import get_planets_dict
 from tkinter import ttk
-from PIL import Image, ImageTk
+from app.esp_adapter_mock import EspAdapterMock
+from app.coordenates import get_planet_coord
+from setting import MIN_DEG_AZ, MIN_DEG_ALT
 
 
 class CalibrateScreen(tk.Frame):
@@ -15,8 +17,9 @@ class CalibrateScreen(tk.Frame):
 
         self.selected_planet = None
         self.controller = controller
-        self.running = True
-        self.running_lock = threading.Lock()
+
+        self.positioning = False
+        self.positioning_lock = threading.Lock()
 
         self.plantes_dict = get_planets_dict()
         self.plantes_list = self.plantes_dict.keys()
@@ -50,7 +53,7 @@ class CalibrateScreen(tk.Frame):
         button_posicionar["justify"] = "center"
         button_posicionar["text"] = "Posicionar"
         button_posicionar.place(x=90, y=180, width=220, height=30)
-        button_posicionar["command"] = self.button_visualizar_command
+        button_posicionar["command"] = self.position_button_action
 
         button_finalizar = tk.Button(self)
         button_finalizar["bg"] = "#efefef"
@@ -70,7 +73,7 @@ class CalibrateScreen(tk.Frame):
         button_cancelar["justify"] = "center"
         button_cancelar["text"] = "Cancelar"
         button_cancelar.place(x=70, y=430, width=320, height=65)
-        button_cancelar["command"] = self.button_visualizar_command
+        button_cancelar["command"] = self.button_cancelar_command
 
         button_arrow_up = tk.Button(self)
         button_arrow_up["bg"] = "#efefef"
@@ -80,7 +83,7 @@ class CalibrateScreen(tk.Frame):
         button_arrow_up["justify"] = "center"
         button_arrow_up["text"] = "⮝"
         button_arrow_up.place(x=540, y=90, width=80, height=80)
-        button_arrow_up["command"] = self.button_visualizar_command
+        button_arrow_up["command"] = self.move_up
 
         button_arrow_down = tk.Button(self)
         button_arrow_down["bg"] = "#efefef"
@@ -90,7 +93,7 @@ class CalibrateScreen(tk.Frame):
         button_arrow_down["justify"] = "center"
         button_arrow_down["text"] = "⮟"
         button_arrow_down.place(x=540, y=320, width=80, height=80)
-        button_arrow_down["command"] = self.button_visualizar_command
+        button_arrow_down["command"] = self.move_down
 
         button_arrow_right = tk.Button(self)
         button_arrow_right["bg"] = "#efefef"
@@ -100,7 +103,7 @@ class CalibrateScreen(tk.Frame):
         button_arrow_right["justify"] = "center"
         button_arrow_right["text"] = "⮞"
         button_arrow_right.place(x=665, y=207, width=80, height=80)
-        button_arrow_right["command"] = self.button_visualizar_command
+        button_arrow_right["command"] = self.move_right
 
         button_arrow_left = tk.Button(self)
         button_arrow_left["bg"] = "#efefef"
@@ -110,31 +113,72 @@ class CalibrateScreen(tk.Frame):
         button_arrow_left["justify"] = "center"
         button_arrow_left["text"] = "⮜"
         button_arrow_left.place(x=415, y=207, width=80, height=80)
-        button_arrow_left["command"] = self.button_visualizar_command
+        button_arrow_left["command"] = self.move_left
+
+    def move_up(self):
+        self.controller.dx += 1
+
+    def move_down(self):
+        self.controller.dx -= 1
+
+    def move_left(self):
+        self.controller.dy -= 1
+
+    def move_right(self):
+        self.controller.dy += 1
+
+    def position_button_action(self):
+
+        if not self.selected_planet:
+            return
+
+        thr = threading.Thread(target=self.position_planet, args=(), kwargs={}, daemon=True)
+        self.positioning_lock.acquire()
+        self.positioning = True
+        self.positioning_lock.release()
+
+        thr.start()
+
+    def position_planet(self):
+
+        while self.positioning:
+            coord = get_planet_coord(self.selected_planet, self.controller.lat, self.controller.long)
+            az = float(coord.az.deg) + MIN_DEG_AZ * self.controller.dx
+            alt = float(coord.alt.deg) + MIN_DEG_ALT * self.controller.dy
+            print(f"Az: {az}, Alt: {alt} - dx: {self.controller.dx}, dy: {self.controller.dy}")
+            self.controller.esp.send_coord(az, alt)
+            time.sleep(1)
+
+        print("Out")
 
     def button_visualizar_command(self):
-        self.running_lock.acquire()
-        self.running = False
-        self.running_lock.release()
+
+        self.positioning_lock.acquire()
+        self.positioning = False
+        self.positioning_lock.release()
 
         print("command")
         if self.selected_planet:
             print(f"Selected planet {self.selected_planet}")
 
     def button_finalizar_command(self):
-        thr = threading.Thread(target=self.print_test, args=(), kwargs={})
-        self.running_lock.acquire()
-        self.running = True
-        self.running_lock.release()
 
-        thr.start()
+        self.positioning_lock.acquire()
+        self.positioning = False
+        self.positioning_lock.release()
 
-    def print_test(self):
-        while self.running:
-            print("test")
-            time.sleep(1)
+        self.controller.show_frame("HomeScreen")
 
-        print("Out")
+    def button_cancelar_command(self):
+
+        self.positioning_lock.acquire()
+        self.positioning = False
+        self.positioning_lock.release()
+
+        self.controller.dx = 0
+        self.controller.dy = 0
+
+        self.controller.show_frame("HomeScreen")
 
     def onselect(self, evt):
         # Note here that Tkinter passes an event object to onselect()

@@ -5,10 +5,14 @@ from astropy.coordinates import get_body, EarthLocation, AltAz
 from astropy.time import Time
 
 
-def get_planet_coord(planet, lat, long):
+def get_planet_coord(planet: str, lat: float, long: float, date=None):
 
     utcoffset = -3*u.hour
-    now = Time(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) - utcoffset
+    if not date:
+        now = Time(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) - utcoffset
+    else:
+        now = date
+
     loc = EarthLocation(lat=lat, lon=long, height=0)
 
     plan = get_body(planet, time=now, location=loc)

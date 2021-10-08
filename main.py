@@ -2,6 +2,7 @@ import tkinter as tk
 from screens.home import HomeScreen
 from screens.calibrate import CalibrateScreen
 from screens.free_move import FreeMoveScreen
+from app.esp_adapter_mock import EspAdapterMock
 
 from setting import APP_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -10,6 +11,12 @@ class MainApplication(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
+        self.esp = EspAdapterMock()
+
+        self.lat, self.long = self.esp.get_location()
+        self.dx = 0
+        self.dy = 0
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
