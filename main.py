@@ -3,8 +3,9 @@ from screens.home import HomeScreen
 from screens.calibrate import CalibrateScreen
 from screens.free_move import FreeMoveScreen
 from app.esp_adapter_mock import EspAdapterMock
+from app.esp_adapter import EspAdapter
 
-from setting import APP_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT
+from setting import APP_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT, BLUETOOTH_MODE
 
 
 class MainApplication(tk.Tk):
@@ -12,7 +13,10 @@ class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
-        self.esp = EspAdapterMock()
+        if BLUETOOTH_MODE == "MOCK":
+            self.esp = EspAdapterMock()
+        else:
+            self.esp = EspAdapter()
 
         self.lat, self.long = self.esp.get_location()
         self.dx = 0

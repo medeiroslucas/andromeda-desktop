@@ -26,3 +26,19 @@ class EspAdapter:
 
     def send_coord(self, az, alt):
         self.req.write_by_handle(0x20, str(bytearray([az, alt])))
+
+    @staticmethod
+    def move_up():
+        pass
+
+    @staticmethod
+    def move_down():
+        pass
+
+    @staticmethod
+    def move_right():
+        pass
+
+    @staticmethod
+    def move_left():
+        pass
