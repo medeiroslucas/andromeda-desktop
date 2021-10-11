@@ -90,15 +90,19 @@ class FreeMoveScreen(tk.Frame):
         button_arrow_left["command"] = self.move_left
 
     def move_up(self):
+        print("Deslocamento para cima")
         self.controller.dx += 1
 
     def move_down(self):
+        print("Deslocamento para baixo")
         self.controller.dx -= 1
 
     def move_left(self):
+        print("Deslocamento para esquerda")
         self.controller.dy -= 1
 
     def move_right(self):
+        print("Deslocamento para direita")
         self.controller.dy += 1
 
     def button_finalizar_command(self):

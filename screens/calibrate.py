@@ -116,15 +116,19 @@ class CalibrateScreen(tk.Frame):
         button_arrow_left["command"] = self.move_left
 
     def move_up(self):
+        print("Deslocamento para cima")
         self.controller.dx += 1
 
     def move_down(self):
+        print("Deslocamento para baixo")
         self.controller.dx -= 1
 
     def move_left(self):
+        print("Deslocamento para esquerda")
         self.controller.dy -= 1
 
     def move_right(self):
+        print("Deslocamento para direita")
         self.controller.dy += 1
 
     def position_button_action(self):
@@ -148,8 +152,6 @@ class CalibrateScreen(tk.Frame):
             print(f"Az: {az}, Alt: {alt} - dx: {self.controller.dx}, dy: {self.controller.dy}")
             self.controller.esp.send_coord(az, alt)
             time.sleep(1)
-
-        print("Out")
 
     def button_visualizar_command(self):
 
@@ -186,4 +188,4 @@ class CalibrateScreen(tk.Frame):
         planet = w.get()
         planet_name = self.plantes_dict[planet]
         self.selected_planet = planet_name
-        print(f'You selected item: {planet_name}')
+        print(f'Planeta selecionado: {planet_name}')

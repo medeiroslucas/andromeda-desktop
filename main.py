@@ -42,7 +42,7 @@ class MainApplication(tk.Tk):
         self.main_menu.add_command(label="Home", command=lambda: self.show_frame("HomeScreen"))
         self.main_menu.add_command(label="Calibrar", command=lambda: self.show_frame("CalibrateScreen"))
         self.main_menu.add_command(label="Mover Livremente", command=lambda: self.show_frame("FreeMoveScreen"))
-        self.main_menu.add_command(label="Exit", command=self.destroy)
+        self.main_menu.add_command(label="Sair", command=self.destroy)
 
         self.config(menu=self.main_menu)
 

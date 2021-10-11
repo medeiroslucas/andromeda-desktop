@@ -94,8 +94,6 @@ class HomeScreen(tk.Frame):
             self.controller.esp.send_coord(az, alt)
             time.sleep(1)
 
-        print("Out")
-
     def ajuste_fino_button_action(self):
         self.controller.show_frame("FreeMoveScreen")
 
@@ -111,7 +109,7 @@ class HomeScreen(tk.Frame):
         planet = w.get(index)
         planet_name = self.plantes_dict[planet]
         self.selected_planet = planet_name
-        print('You selected item %d: "%s"' % (index, planet_name))
+        print(f'Planeta selecionado: {planet_name}')
 
         fixed_height = 210
 

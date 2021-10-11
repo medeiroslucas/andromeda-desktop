@@ -6,6 +6,12 @@ A instalação do ambiente de desenvolvimento da aplicação Andromeda é dividi
 a instalação de dependências python realizada via Poetry, e a instalação das dependências associadas 
 a utilização da biblioteca de Bluetooth BLE
 
+### Bluetooth BLE
+
+A utilização da biblioteca `gattlib` além do pacote python também depende de outras bibliotecas
+instaladas diretamente via apt (se tratando de ambiente debian). Siga o manual de instalação pelo 
+[link](https://github.com/oscaracena/pygattlib)
+
 ### Dependências Python
 
 O gerenciador de dependências selecionado para o projeto foi o Poetry, sendo assim o primeiro passo
@@ -18,12 +24,6 @@ Logo em seguida devemos executar o comando:
 `poetry install`
 
 Após a execução as dependências python estarão prontas para utilização
-
-### Bluetooth BLE
-
-A utilização da biblioteca `gattlib` além do pacote python também depende de outras bibliotecas
-instaladas diretamente via apt (se tratando de ambiente debian). Siga o manual de instalação pelo 
-[link](https://github.com/oscaracena/pygattlib)
 
 ## Utilização
 
