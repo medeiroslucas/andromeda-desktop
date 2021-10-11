@@ -11,7 +11,7 @@ def get_planet_coord(planet: str, lat: float, long: float, date=None):
     if not date:
         now = Time(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) - utcoffset
     else:
-        now = date
+        now = Time(date) - utcoffset
 
     loc = EarthLocation(lat=lat, lon=long, height=0)
 
