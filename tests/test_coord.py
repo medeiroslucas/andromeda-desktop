@@ -2,8 +2,10 @@ from datetime import datetime
 
 from app.coordenates import get_planet_coord
 
+
 def eq(val1, val2):
     return abs(val1 - val2) < 0.0001
+
 
 def test_get_coord():
 
@@ -17,3 +19,16 @@ def test_get_coord():
     alt = float(coord.alt.deg)
 
     assert eq(az, 98.9403819300) and eq(alt, 81.018271155)
+
+
+def test_get_coord_type_return():
+
+    lat = -19.5186257
+    long = -40.6245297
+
+    coord = get_planet_coord('moon', lat, long)
+
+    az = float(coord.az.deg)
+    alt = float(coord.alt.deg)
+
+    assert isinstance(az, float) and isinstance(alt, float)
