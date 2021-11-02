@@ -1,23 +1,31 @@
-FROM ubuntu:latest
+FROM python:3.9
 
 # Metadata indicating an image maintainer.
 LABEL maintainer="manusenac@hotmail.com"
-ENV DEBIAN_FRONTEND=noninteractive
+
 EXPOSE 8000
 # Install pip requirements
 WORKDIR /home
-COPY requirements.txt .
-RUN apt-get update && apt-get upgrade
-RUN apt-get install python3 -y
-RUN apt-get install python3-pip -y
-RUN python3 -m pip install -r requirements.txt
-RUN apt install pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev -y
-RUN python3 -m pip install poetry 
 
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install tk -y
+RUN apt install fonts-noto pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev -y
 
+RUN pip install poetry==1.1.11
 
+COPY pyproject.toml pyproject.toml
+COPY poetry.lock poetry.lock
 
-# Sets a command or process 
-#that will run each time a container is run from the new image.
+RUN poetry config virtualenvs.create false
+RUN poetry update
+RUN poetry install
+RUN poetry lock
 
+COPY screens/ screens/
+COPY app/ app/
+COPY main.py main.py
+COPY planets.json planets.json
+COPY setting.py setting.py
+COPY utils.py utils.py
 
+CMD python main.py

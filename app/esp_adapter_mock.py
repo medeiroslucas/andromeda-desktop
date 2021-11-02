@@ -1,4 +1,5 @@
 from setting import BLUETOOTH_NAME, SEND_COORD_MOCK_FILE
+import os
 
 
 class EspAdapterMock:
@@ -9,7 +10,8 @@ class EspAdapterMock:
         self.lat = -16.6653
         self.long = -46.2702
 
-        fil = open(SEND_COORD_MOCK_FILE, "wb")
+        fil = open(SEND_COORD_MOCK_FILE, "w+")
+        # Open to erase file data
         fil.close()
 
     def get_location(self):
