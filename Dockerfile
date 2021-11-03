@@ -12,7 +12,7 @@ RUN apt-get install python3 -y
 RUN apt-get install python3-pip -y
 RUN python3 -m pip install -r requirements.txt
 RUN apt install pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev -y
-RUN python3 -m pip install poetry 
+RUN python3 -m pip install poetry -y
 
 
 
