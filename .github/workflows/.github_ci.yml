@@ -77,9 +77,15 @@ jobs:
       - name: Generate Dist
         run: |
           sudo docker run -v $(pwd)/:/home/ andromeda:${{ env.RELEASE_VERSION }} pyinstaller main.py -n andromeda --add-data="imgs:imgs" --collect-submodules="PIL"
+          ls
           cd dist
+          ls
+          ls andromeda
       - name: Compress Release
         uses: papeloto/action-zip@v1
+        run:
+          ls
+          cd dist
         with:
           files: andromeda/
           recursive: true
