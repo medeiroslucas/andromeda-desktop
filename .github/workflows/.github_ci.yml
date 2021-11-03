@@ -83,9 +83,6 @@ jobs:
           ls andromeda
       - name: Compress Release
         uses: papeloto/action-zip@v1
-        run:
-          ls
-          cd dist
         with:
           files: andromeda/
           recursive: true
