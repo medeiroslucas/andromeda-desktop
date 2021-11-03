@@ -74,7 +74,7 @@ class HomeScreen(tk.Frame):
 
     def visualizar_button_action(self):
 
-        if not self.selected_planet:
+        if not self.selected_planet or self.positioning:
             return
 
         thr = threading.Thread(target=self.position_planet, args=(), kwargs={}, daemon=True)

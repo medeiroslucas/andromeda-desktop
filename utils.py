@@ -1,10 +1,13 @@
-import json
-from setting import PLANETS_JSON_PATH
+def get_planets_dict():
 
-
-def get_planets_dict(planets_json_path=PLANETS_JSON_PATH):
-
-    with open(planets_json_path,) as fil:
-        plantes_json = json.load(fil)
+    plantes_json = {
+        "Lua": "moon",
+        "Vênus": "venus",
+        "Marte": "mars",
+        "Júpiter": "jupiter",
+        "Netuno": "neptune",
+        "Urano": "uranus",
+        "Mercúrio": "mercury",
+        "Saturno": "saturn"}
 
     return plantes_json

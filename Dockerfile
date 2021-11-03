@@ -23,6 +23,7 @@ RUN poetry lock
 
 COPY screens/ screens/
 COPY app/ app/
+COPY imgs/ imgs/
 COPY main.py main.py
 COPY planets.json planets.json
 COPY setting.py setting.py

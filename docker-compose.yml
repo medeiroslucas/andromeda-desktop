@@ -4,8 +4,8 @@ services:
 
   gui:
     env_file: .env
-#    volumes:
-#      - ./:/home/
+    volumes:
+      - ./:/home/
 #      - /tmp/.X11-unix:/tmp/.X11-unix
     build:
       dockerfile: Dockerfile
