@@ -27,9 +27,8 @@ jobs:
 
       - name: Install deps
         run: |
-          sudo apt-get update -y && apt-get upgrade -y
           sudo apt-get install tk -y
-          sudo apt install fonts-noto pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev -y
+          sudo apt-get install fonts-noto pkg-config libboost-python-dev libboost-thread-dev libbluetooth-dev libglib2.0-dev python-dev -y
           pip install poetry==1.1.11
           poetry config virtualenvs.in-project true
           poetry update
