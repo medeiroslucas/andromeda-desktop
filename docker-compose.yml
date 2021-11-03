@@ -1,0 +1,15 @@
+version: "3.2"
+
+services:
+
+  gui:
+    env_file: .env
+    volumes:
+      - ./:/home/
+#      - /tmp/.X11-unix:/tmp/.X11-unix
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "5000:5000"
+    command: python main.py
